@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mi Blog</title>
+  </head>
+  <body>
+    <a
+      href="{% url 'all_posts' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(118, 41, 212);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Ver todos los Posts</a
+    >
+    <a
+      href="{% url 'search_by_user' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(183, 212, 41);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Buscar por Usuario</a
+    >
+
+    <h1>Bienvenido a Mi Blog</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      <label for="user">Usuario:</label><br />
+      <input type="text" id="user" name="user" required /><br /><br />
+
+      <label for="contenido">Escribe tu post:</label><br />
+      <textarea
+        id="contenido"
+        name="contenido"
+        rows="4"
+        cols="50"
+        required
+      ></textarea
+      ><br /><br />
+
+      <button type="submit">Publicar</button>
+    </form>
+
+    <hr />
+
+    <h2>Posts recientes:</h2>
+    {% for post in posts %}
+    <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
+    <p>{{ post.contenido }}</p>
+    <hr />
+    {% empty %}
+    <p>No hay posts todavía.</p>
+    {% endfor %}
+  </body>
+</html>

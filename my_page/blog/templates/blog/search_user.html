@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>All Posts</title>
+  </head>
+  <body>
+    <a
+      href="{% url 'home' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >← Volver al inicio</a
+    >
+    <a
+      href="{% url 'all_posts' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(118, 41, 212);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Ver todos los Posts</a
+    >
+    <br /><br />
+    <form method="POST">
+      {% csrf_token %}
+      <label for="user">Usuario:</label><br />
+      <input type="text" id="user" name="user" required /><br /><br />
+      <button type="submit">Buscar</button>
+    </form>
+  </body>
+</html>
