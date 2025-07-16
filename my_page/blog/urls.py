@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('posts', views.show_all_post, name='all_posts'),
     path('posts/user', views.search_by_user, name='search_by_user'),
-    path('posts/user/<str:user>', views.show_post_by_user, name='posts_by_user') # noqa
+    path('posts/user/<str:user>', views.show_post_by_user, name='posts_by_user'), # noqa
+    path('posts/delete', views.delete_post_by_id, name='delete_posts')
 ]

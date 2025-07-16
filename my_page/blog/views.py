@@ -45,5 +45,28 @@ def show_all_post(request):
     posts = Post.objects.all().order_by('-fecha')
     return render(request, 'blog/all_posts.html', {'posts': posts})
 
-# TODO: Eliminar post
+
+def delete_post_by_id(request):
+    posts = Post.objects.all().order_by('-fecha')[:15]  # ultimos 15
+    if request.method == 'POST':
+        try:
+            post_id = request.POST.get('post_id')
+            post = Post.objects.get(id=post_id)
+            post_data = {
+                'usuario': post.user,
+            }
+            post.delete()
+            return render(
+                request, 'blog/delete_posts.html',
+                {
+                    'posts': posts,
+                    'deleted': True,
+                    'deleted_user': post_data['usuario']
+                })
+
+        except Post.DoesNotExist:
+            return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
+    # Si es GET, muestra todos los posts
+    return render(request, 'blog/delete_posts.html', {'posts': posts})
+
 # TODO: Editar post

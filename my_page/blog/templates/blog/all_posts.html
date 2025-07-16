@@ -32,6 +32,9 @@
     <h1>Todos los Posts</h1>
     <hr />
     {% for post in posts %}
+    <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
+      id: {{ post.id }}
+    </p>
     <p><strong>{{ post.user }} @ {{ post.fecha }} </strong> escribió:</p>
     <p>{{ post.contenido }}</p>
     <hr />
