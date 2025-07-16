@@ -29,12 +29,47 @@
       "
       >Ver todos los Posts</a
     >
+    <a
+      href="{% url 'delete_posts' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(212, 109, 41);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Eliminar Post</a
+    >
+
     <br /><br />
     <form method="POST">
       {% csrf_token %}
       <label for="user">Usuario:</label><br />
-      <input type="text" id="user" name="user" required /><br /><br />
-      <button type="submit">Buscar</button>
+      <input type="text" id="user" name="user" /><br /><br />
+      <button type="submit" name="action" value="search">Buscar Posts</button>
+      <button type="submit" name="action" value="show_users">
+        Mostrar usuarios
+      </button>
     </form>
+    <br /><br />
+    <hr />
+    {% if show_posts %} {% for post in posts %}
+    <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
+      id: {{ post.id }}
+    </p>
+    <p><strong>{{ post.user|title }} @ {{ post.fecha }} </strong> escribió:</p>
+    <p>{{ post.contenido }}</p>
+    <hr />
+    {% endfor %} {% else %} {% if user_not_found %}
+    <p>Usuario '{{ user }}' no encontrado. Intenta de nuevo.</p>
+    <hr />
+    {% endif %}
+    <p>Usuarios:</p>
+    <ul>
+      {% for user in users %}
+      <li>{{ user|title }}</li>
+      {% endfor %} {% endif %}
+    </ul>
   </body>
 </html>
