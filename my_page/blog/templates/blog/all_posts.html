@@ -29,6 +29,19 @@
       "
       >Buscar por Usuario</a
     >
+    <a
+      href="{% url 'delete_posts' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(212, 109, 41);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Eliminar Post</a
+    >
+
     <h1>Todos los Posts</h1>
     <hr />
     {% for post in posts %}
