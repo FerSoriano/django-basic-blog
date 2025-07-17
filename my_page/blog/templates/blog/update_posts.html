@@ -6,16 +6,16 @@
   </head>
   <body>
     <a
-      href="{% url 'all_posts' %}"
+      href="{% url 'home' %}"
       style="
         display: inline-block;
         padding: 6px 12px;
-        background-color: rgb(118, 41, 212);
+        background-color: #007bff;
         color: white;
         text-decoration: none;
         border-radius: 4px;
       "
-      >Ver todos los Posts</a
+      >← Volver al inicio</a
     >
     <a
       href="{% url 'search_by_user' %}"
@@ -29,60 +29,43 @@
       "
       >Buscar por Usuario</a
     >
-    <a
-      href="{% url 'update_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(118, 212, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Editar Post</a
-    >
-    <a
-      href="{% url 'delete_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(212, 109, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Eliminar Post</a
-    >
 
-    <h1>Bienvenido a Mi Blog</h1>
+    <h1>Editar Post</h1>
 
     <form method="POST">
       {% csrf_token %}
-      <label for="user">Usuario:</label><br />
-      <input type="text" id="user" name="user" required /><br /><br />
+      <label for="post_id">Post ID:</label><br />
+      <input type="text" id="post_id" name="post_id" required /><br /><br />
 
-      <label for="contenido">Escribe tu post:</label><br />
+      <label for="new_comment">Edita tu post:</label><br />
       <textarea
-        id="contenido"
-        name="contenido"
+        id="new_comment"
+        name="new_comment"
         rows="4"
         cols="50"
         required
       ></textarea
       ><br /><br />
 
-      <button type="submit">Publicar</button>
+      <button type="submit">Editar</button>
     </form>
 
     <hr />
-
     <h2>Posts recientes:</h2>
     {% for post in posts %}
+    <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
+      id: {{ post.id }}
+    </p>
     <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
     <p>{{ post.contenido }}</p>
     <hr />
     {% empty %}
     <p>No hay posts todavía.</p>
-    {% endfor %}
+    {% endfor %} {% if modified %}
+    <script>
+      alert("¡Post de {{ user }} modfificado correctamente!");
+      window.location.href = "{% url 'home' %}";
+    </script>
+    {% endif %}
   </body>
 </html>

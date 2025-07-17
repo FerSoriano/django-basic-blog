@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.urls import reverse
 from .models import Post
 
@@ -95,4 +95,61 @@ def delete_post_by_id(request):
     # Si es GET, muestra todos los posts
     return render(request, 'blog/delete_posts.html', {'posts': posts})
 
+
 # TODO: Editar post
+def update_post_by_id(request):
+    redirect_html = 'blog/update_posts.html'
+    posts = get_posts(total_posts=10)  # ultimos 10
+    if request.method == 'POST':
+        try:
+            post_id = request.POST.get('post_id')
+            new_comment = request.POST.get('new_comment')
+
+            if len(new_comment) == 0:
+                return render(
+                    request, redirect_html,
+                    {
+                        'modified': False,
+                        'posts': posts
+                    }
+                )
+
+            post = Post.objects.get(id=post_id)
+            post_data = {
+                'user': post.user,
+                'previous_comment': post.contenido
+            }
+
+            post.contenido = new_comment  # actualizar post ???
+            post.save()
+            # TODO: Actualizar fehcha
+            return render(
+                request, redirect_html,
+                {
+                    'modified': True,
+                    'posts': posts,
+                    'user': post_data['user'],
+                    'previous_comment': post_data['previous_comment']
+                }
+            )
+        except (Post.DoesNotExist, ValueError):
+            return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
+
+    return render(
+                    request, redirect_html,
+                    {
+                        'modified': False,
+                        'posts': posts
+                    }
+                )
+
+
+def get_posts(all_posts=False, total_posts=0):
+    """total_posts should be greater than Zero"""
+    if all_posts:
+        return Post.objects.all().order_by('-fecha')
+
+    if total_posts < 0:
+        return HttpResponseBadRequest("total_posts should be greater than Zero")  # noqa
+
+    return Post.objects.all().order_by('-fecha')[:total_posts]
