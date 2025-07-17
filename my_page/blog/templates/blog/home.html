@@ -77,8 +77,16 @@
     <hr />
 
     <h2>Posts recientes:</h2>
-    {% for post in posts %}
+    {% for post in posts %} {% if post.modificado %}
+    <p>
+      <strong>{{ post.user }}</strong> escribió @{{ post.fecha }}
+      <span style="font-style: italic; color: gray; font-size: 0.9em"
+        >(editado)</span
+      >:
+    </p>
+    {% else %}
     <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
+    {% endif %}
     <p>{{ post.contenido }}</p>
     <hr />
     {% empty %}

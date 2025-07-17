@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.urls import reverse
 from .models import Post
+from datetime import datetime
 
 
 def home(request):
@@ -96,7 +97,6 @@ def delete_post_by_id(request):
     return render(request, 'blog/delete_posts.html', {'posts': posts})
 
 
-# TODO: Editar post
 def update_post_by_id(request):
     redirect_html = 'blog/update_posts.html'
     posts = get_posts(total_posts=10)  # ultimos 10
@@ -104,6 +104,7 @@ def update_post_by_id(request):
         try:
             post_id = request.POST.get('post_id')
             new_comment = request.POST.get('new_comment')
+            today = datetime.now()
 
             if len(new_comment) == 0:
                 return render(
@@ -120,13 +121,14 @@ def update_post_by_id(request):
                 'previous_comment': post.contenido
             }
 
-            post.contenido = new_comment  # actualizar post ???
-            post.save()
-            # TODO: Actualizar fehcha
+            post.contenido = new_comment
+            post.fecha = today
+            post.modificado = True
+            post.save()  # actualizar post
+
             return render(
                 request, redirect_html,
                 {
-                    'modified': True,
                     'posts': posts,
                     'user': post_data['user'],
                     'previous_comment': post_data['previous_comment']
@@ -136,12 +138,12 @@ def update_post_by_id(request):
             return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
 
     return render(
-                    request, redirect_html,
-                    {
-                        'modified': False,
-                        'posts': posts
-                    }
-                )
+        request, redirect_html,
+        {
+            'modified': False,
+            'posts': posts
+        }
+    )
 
 
 def get_posts(all_posts=False, total_posts=0):

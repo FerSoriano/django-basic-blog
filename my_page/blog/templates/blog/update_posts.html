@@ -56,7 +56,16 @@
     <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
       id: {{ post.id }}
     </p>
+    {% if post.modificado %}
+    <p>
+      <strong>{{ post.user }}</strong> escribió @{{ post.fecha }}
+      <span style="font-style: italic; color: gray; font-size: 0.9em"
+        >(editado)</span
+      >:
+    </p>
+    {% else %}
     <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
+    {% endif %}
     <p>{{ post.contenido }}</p>
     <hr />
     {% empty %}
