@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from django.urls import reverse
 from .models import Post
 from datetime import datetime
 
@@ -17,7 +16,7 @@ def home(request):
         return redirect('home')
 
     # Si es GET, muestra todos los posts
-    posts = Post.objects.all().order_by('-fecha')[:5]  # más recientes primero
+    posts = get_posts(total_posts=5)
     return render(request, 'blog/home.html', {'posts': posts})
 
 
@@ -69,12 +68,12 @@ def get_users():
 
 
 def show_all_post(request):
-    posts = Post.objects.all().order_by('-fecha')
+    posts = get_posts(all_posts=True)
     return render(request, 'blog/all_posts.html', {'posts': posts})
 
 
 def delete_post_by_id(request):
-    posts = Post.objects.all().order_by('-fecha')[:10]  # ultimos 10
+    posts = get_posts(total_posts=10)  # ultimos 10
     if request.method == 'POST':
         try:
             post_id = request.POST.get('post_id')
@@ -149,7 +148,7 @@ def update_post_by_id(request):
 def get_posts(all_posts=False, total_posts=0):
     """total_posts should be greater than Zero"""
     if all_posts:
-        return Post.objects.all().order_by('-fecha')
+        return Post.objects.all().order_by('-fecha')  # mas recientes primero
 
     if total_posts < 0:
         return HttpResponseBadRequest("total_posts should be greater than Zero")  # noqa
