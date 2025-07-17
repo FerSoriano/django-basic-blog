@@ -30,6 +30,18 @@
       >Buscar por Usuario</a
     >
     <a
+      href="{% url 'update_posts' %}"
+      style="
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: rgb(118, 212, 41);
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      "
+      >Editar Post</a
+    >
+    <a
       href="{% url 'delete_posts' %}"
       style="
         display: inline-block;
@@ -65,8 +77,16 @@
     <hr />
 
     <h2>Posts recientes:</h2>
-    {% for post in posts %}
+    {% for post in posts %} {% if post.modificado %}
+    <p>
+      <strong>{{ post.user }}</strong> escribió @{{ post.fecha }}
+      <span style="font-style: italic; color: gray; font-size: 0.9em"
+        >(editado)</span
+      >:
+    </p>
+    {% else %}
     <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
+    {% endif %}
     <p>{{ post.contenido }}</p>
     <hr />
     {% empty %}

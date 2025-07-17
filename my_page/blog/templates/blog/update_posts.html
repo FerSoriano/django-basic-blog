@@ -29,27 +29,25 @@
       "
       >Buscar por Usuario</a
     >
-    <a
-      href="{% url 'update_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(118, 212, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Editar Post</a
-    >
 
-    <h1>Eliminar Post</h1>
+    <h1>Editar Post</h1>
 
     <form method="POST">
       {% csrf_token %}
       <label for="post_id">Post ID:</label><br />
       <input type="text" id="post_id" name="post_id" required /><br /><br />
-      <br /><br />
-      <button type="submit">Eliminar</button>
+
+      <label for="new_comment">Edita tu post:</label><br />
+      <textarea
+        id="new_comment"
+        name="new_comment"
+        rows="4"
+        cols="50"
+        required
+      ></textarea
+      ><br /><br />
+
+      <button type="submit">Editar</button>
     </form>
 
     <hr />
@@ -72,9 +70,9 @@
     <hr />
     {% empty %}
     <p>No hay posts todavía.</p>
-    {% endfor %} {% if deleted %}
+    {% endfor %} {% if modified %}
     <script>
-      alert("¡Post de {{ deleted_user }} eliminado correctamente!");
+      alert("¡Post de {{ user }} modfificado correctamente!");
       window.location.href = "{% url 'home' %}";
     </script>
     {% endif %}

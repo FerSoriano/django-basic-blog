@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseNotFound
-from django.urls import reverse
+from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from .models import Post
+from datetime import datetime
 
 
 def home(request):
@@ -16,7 +16,7 @@ def home(request):
         return redirect('home')
 
     # Si es GET, muestra todos los posts
-    posts = Post.objects.all().order_by('-fecha')[:5]  # más recientes primero
+    posts = get_posts(total_posts=5)
     return render(request, 'blog/home.html', {'posts': posts})
 
 
@@ -68,12 +68,12 @@ def get_users():
 
 
 def show_all_post(request):
-    posts = Post.objects.all().order_by('-fecha')
+    posts = get_posts(all_posts=True)
     return render(request, 'blog/all_posts.html', {'posts': posts})
 
 
 def delete_post_by_id(request):
-    posts = Post.objects.all().order_by('-fecha')[:10]  # ultimos 10
+    posts = get_posts(total_posts=10)  # ultimos 10
     if request.method == 'POST':
         try:
             post_id = request.POST.get('post_id')
@@ -95,4 +95,62 @@ def delete_post_by_id(request):
     # Si es GET, muestra todos los posts
     return render(request, 'blog/delete_posts.html', {'posts': posts})
 
-# TODO: Editar post
+
+def update_post_by_id(request):
+    redirect_html = 'blog/update_posts.html'
+    posts = get_posts(total_posts=10)  # ultimos 10
+    if request.method == 'POST':
+        try:
+            post_id = request.POST.get('post_id')
+            new_comment = request.POST.get('new_comment')
+            today = datetime.now()
+
+            if len(new_comment) == 0:
+                return render(
+                    request, redirect_html,
+                    {
+                        'modified': False,
+                        'posts': posts
+                    }
+                )
+
+            post = Post.objects.get(id=post_id)
+            post_data = {
+                'user': post.user,
+                'previous_comment': post.contenido
+            }
+
+            post.contenido = new_comment
+            post.fecha = today
+            post.modificado = True
+            post.save()  # actualizar post
+
+            return render(
+                request, redirect_html,
+                {
+                    'posts': posts,
+                    'user': post_data['user'],
+                    'previous_comment': post_data['previous_comment']
+                }
+            )
+        except (Post.DoesNotExist, ValueError):
+            return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
+
+    return render(
+        request, redirect_html,
+        {
+            'modified': False,
+            'posts': posts
+        }
+    )
+
+
+def get_posts(all_posts=False, total_posts=0):
+    """total_posts should be greater than Zero"""
+    if all_posts:
+        return Post.objects.all().order_by('-fecha')  # mas recientes primero
+
+    if total_posts < 0:
+        return HttpResponseBadRequest("total_posts should be greater than Zero")  # noqa
+
+    return Post.objects.all().order_by('-fecha')[:total_posts]
