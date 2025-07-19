@@ -1,0 +1,64 @@
+<header>
+    <nav>
+        <a
+            href="{% url 'home' %}"
+            style="
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            "
+            >Crear Post</a
+        >
+        <a
+            href="{% url 'all_posts' %}"
+            style="
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgb(118, 41, 212);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            "
+            >Ver todos los Posts</a
+        >
+        <a
+            href="{% url 'search_by_user' %}"
+            style="
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgb(183, 212, 41);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            "
+            >Buscar por Usuario</a
+        >
+        <a
+            href="{% url 'update_posts' %}"
+            style="
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgb(118, 212, 41);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            "
+            >Editar Post</a
+        >
+        <a
+            href="{% url 'delete_posts' %}"
+            style="
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgb(212, 109, 41);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            "
+            >Eliminar Post</a
+        >
+    </nav>
+</header>

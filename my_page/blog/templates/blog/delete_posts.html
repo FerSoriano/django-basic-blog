@@ -1,82 +1,31 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Mi Blog</title>
-  </head>
-  <body>
-    <a
-      href="{% url 'home' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >← Volver al inicio</a
-    >
-    <a
-      href="{% url 'search_by_user' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(183, 212, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Buscar por Usuario</a
-    >
-    <a
-      href="{% url 'update_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(118, 212, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Editar Post</a
-    >
+{% extends "base.html" %}
 
-    <h1>Eliminar Post</h1>
+{% block page_title %}Eliminar Post{% endblock page_title %}
 
-    <form method="POST">
-      {% csrf_token %}
-      <label for="post_id">Post ID:</label><br />
-      <input type="text" id="post_id" name="post_id" required /><br /><br />
-      <br /><br />
-      <button type="submit">Eliminar</button>
-    </form>
+{% block body_content %}
 
-    <hr />
-    <h2>Posts recientes:</h2>
-    {% for post in posts %}
-    <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
-      id: {{ post.id }}
-    </p>
-    {% if post.modificado %}
-    <p>
-      <strong>{{ post.user }}</strong> escribió @{{ post.fecha }}
-      <span style="font-style: italic; color: gray; font-size: 0.9em"
-        >(editado)</span
-      >:
-    </p>
-    {% else %}
-    <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
-    {% endif %}
-    <p>{{ post.contenido }}</p>
-    <hr />
-    {% empty %}
-    <p>No hay posts todavía.</p>
-    {% endfor %} {% if deleted %}
+  {% include "blog/includes/header.html" %}
+
+  <h1>Eliminar Post</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    <label for="post_id">Post ID:</label><br />
+    <input type="text" id="post_id" name="post_id" required />
+    <br /><br />
+    <button type="submit">Eliminar</button>
+  </form>
+
+  <hr />
+  <h2>Posts recientes:</h2>
+  
+  {% include "blog/includes/show_posts.html" %}
+
+  {% if deleted %}
     <script>
       alert("¡Post de {{ deleted_user }} eliminado correctamente!");
       window.location.href = "{% url 'home' %}";
     </script>
-    {% endif %}
-  </body>
-</html>
+  {% endif %}
+
+{% endblock body_content %}
