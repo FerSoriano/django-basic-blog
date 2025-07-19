@@ -1,58 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>All Posts</title>
-  </head>
-  <body>
-    <a
-      href="{% url 'home' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >← Volver al inicio</a
-    >
-    <a
-      href="{% url 'all_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(118, 41, 212);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Ver todos los Posts</a
-    >
-    <a
-      href="{% url 'update_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(118, 212, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Editar Post</a
-    >
-    <a
-      href="{% url 'delete_posts' %}"
-      style="
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: rgb(212, 109, 41);
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-      "
-      >Eliminar Post</a
-    >
+{% extends "base.html" %}
+
+{% block page_title %}Buscar por Usuario{% endblock page_title %}
+
+{% block body_content %}
+
+    {% include "blog/includes/header.html" %}
 
     <br /><br />
     <form method="POST">
@@ -66,31 +18,23 @@
     </form>
     <br /><br />
     <hr />
-    {% if show_posts %} {% for post in posts %}
-    <p style="font-size: 12px; color: gray; text-align: left; margin: 0">
-      id: {{ post.id }}
-    </p>
-    {% if post.modificado %}
-    <p>
-      <strong>{{ post.user }}</strong> escribió @{{ post.fecha }}
-      <span style="font-style: italic; color: gray; font-size: 0.9em"
-        >(editado)</span
-      >:
-    </p>
-    {% else %}
-    <p><strong>{{ post.user }}</strong> escribió @{{ post.fecha }}:</p>
+    {% if show_posts %} 
+    
+      {% include "blog/includes/show_posts.html" %}
+      
+    {% else %} 
+      {% if user_not_found %}
+        <p>Usuario '{{ user }}' no encontrado. Intenta de nuevo.</p>
+        <hr />
+      {% endif %}
+    
+      <p>Usuarios:</p>
+      <ul>
+        {% for user in users %}
+        <li>{{ user|title }}</li>
+        {% endfor %}
+      </ul>
+      
     {% endif %}
-    <p>{{ post.contenido }}</p>
-    <hr />
-    {% endfor %} {% else %} {% if user_not_found %}
-    <p>Usuario '{{ user }}' no encontrado. Intenta de nuevo.</p>
-    <hr />
-    {% endif %}
-    <p>Usuarios:</p>
-    <ul>
-      {% for user in users %}
-      <li>{{ user|title }}</li>
-      {% endfor %} {% endif %}
-    </ul>
-  </body>
-</html>
+
+{% endblock body_content %}

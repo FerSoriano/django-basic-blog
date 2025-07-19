@@ -17,7 +17,13 @@ def home(request):
 
     # Si es GET, muestra todos los posts
     posts = get_posts(total_posts=5)
-    return render(request, 'blog/home.html', {'posts': posts})
+    return render(
+        request,
+        'blog/home.html',
+        {
+            'posts': posts
+        }
+    )
 
 
 def search_by_user(request):
@@ -31,28 +37,34 @@ def search_by_user(request):
 
             if not posts.exists():
                 return render(
-                    request, redirect_html,
+                    request,
+                    redirect_html,
                     {
                         'users': get_users(),
                         'show_posts': False,
                         'user': user,
                         'user_not_found': True
-                    })
+                    }
+                )
 
             return render(
-                request, redirect_html,
+                request,
+                redirect_html,
                 {
                     'user': user,
                     'posts': posts,
                     'show_posts': True
-                })
+                }
+            )
 
     return render(
-        request, redirect_html,
+        request,
+        redirect_html,
         {
             'users': get_users(),
             'show_posts': False
-        })
+        }
+    )
 
 
 def get_users():
@@ -69,7 +81,13 @@ def get_users():
 
 def show_all_post(request):
     posts = get_posts(all_posts=True)
-    return render(request, 'blog/all_posts.html', {'posts': posts})
+    return render(
+        request,
+        'blog/all_posts.html',
+        {
+            'posts': posts
+        }
+    )
 
 
 def delete_post_by_id(request):
@@ -83,17 +101,25 @@ def delete_post_by_id(request):
             }
             post.delete()
             return render(
-                request, 'blog/delete_posts.html',
+                request,
+                'blog/delete_posts.html',
                 {
                     'posts': posts,
                     'deleted': True,
                     'deleted_user': post_data['usuario']
-                })
+                }
+            )
 
         except (Post.DoesNotExist, ValueError):
             return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
     # Si es GET, muestra todos los posts
-    return render(request, 'blog/delete_posts.html', {'posts': posts})
+    return render(
+        request,
+        'blog/delete_posts.html',
+        {
+            'posts': posts
+        }
+    )
 
 
 def update_post_by_id(request):
@@ -107,7 +133,8 @@ def update_post_by_id(request):
 
             if len(new_comment) == 0:
                 return render(
-                    request, redirect_html,
+                    request,
+                    redirect_html,
                     {
                         'modified': False,
                         'posts': posts
@@ -126,7 +153,8 @@ def update_post_by_id(request):
             post.save()  # actualizar post
 
             return render(
-                request, redirect_html,
+                request,
+                redirect_html,
                 {
                     'posts': posts,
                     'user': post_data['user'],
@@ -137,7 +165,8 @@ def update_post_by_id(request):
             return HttpResponseNotFound("El post NO existe. Intenta de nuevo.")
 
     return render(
-        request, redirect_html,
+        request,
+        redirect_html,
         {
             'modified': False,
             'posts': posts
